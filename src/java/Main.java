@@ -4,12 +4,14 @@ import java.util.Arrays;
 public class Main {
     public static Cliente[] clienti = new Cliente[10];
     public static int nClienti = 0;
+    static boolean programContinue = false;
 
     public static void main(String[] args){
+
        do{
            menu();
 
-       }while (true);
+       }while (programContinue);
 
     }
 
@@ -22,21 +24,27 @@ public class Main {
         switch (menu){
             case "1. Visualizza Lista Clienti":
                 visualizzaListaClienti();
+                programContinue= true;
                 break;
             case "2. Inserisci Cliente":
                 inserisciNuovoCliente(new Cliente(JOptionPane.showInputDialog(null, "inserisci nome"), JOptionPane.showInputDialog(null, "inserisci cognome")));
+                programContinue= true;
                 break;
             case "3. Modifica Cliente":
                 visualizzaListaClienti();
                 String indice = JOptionPane.showInputDialog(null, "Inserisci l'indice del cliente da modificare",JOptionPane.QUESTION_MESSAGE);
                 modificaCliente(Integer.parseInt(indice));
+                programContinue= true;
                 break;
             case "4. Cancella Cliente":
                 visualizzaListaClienti();
                 String index = JOptionPane.showInputDialog(null, "Inserisci l'indice del cliente da cancellare",JOptionPane.QUESTION_MESSAGE);
                 cancellaCliente(Integer.parseInt(index));
+                programContinue= true;
                 break;
             case "5. Esci":
+                programContinue = false;
+                break;
         }
 
     }
