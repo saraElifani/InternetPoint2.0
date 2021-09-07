@@ -8,10 +8,10 @@ public class Main {
 
     public static void main(String[] args){
 
-       do{
-           menu();
+        do{
+            menu();
 
-       }while (programContinue);
+        }while (programContinue);
 
     }
 
@@ -27,19 +27,15 @@ public class Main {
                 programContinue= true;
                 break;
             case "2. Inserisci Cliente":
-                inserisciNuovoCliente(new Cliente(JOptionPane.showInputDialog(null, "inserisci nome"), JOptionPane.showInputDialog(null, "inserisci cognome")));
+                inserisciNuovoCliente();
                 programContinue= true;
                 break;
             case "3. Modifica Cliente":
-                visualizzaListaClienti();
-                String indice = JOptionPane.showInputDialog(null, "Inserisci l'indice del cliente da modificare",JOptionPane.QUESTION_MESSAGE);
-                modificaCliente(Integer.parseInt(indice));
+                modificaCliente();
                 programContinue= true;
                 break;
             case "4. Cancella Cliente":
-                visualizzaListaClienti();
-                String index = JOptionPane.showInputDialog(null, "Inserisci l'indice del cliente da cancellare",JOptionPane.QUESTION_MESSAGE);
-                cancellaCliente(Integer.parseInt(index));
+                cancellaCliente();
                 programContinue= true;
                 break;
             case "5. Esci":
@@ -55,20 +51,27 @@ public class Main {
         JOptionPane.showMessageDialog(null, builder.toString(), "Lista clienti", JOptionPane.INFORMATION_MESSAGE);
     }
 
-    public static Cliente[] inserisciNuovoCliente(Cliente cliente){
+    public static void inserisciNuovoCliente(){
+        inserisciNuovoCliente(new Cliente(JOptionPane.showInputDialog(null, "inserisci nome"), JOptionPane.showInputDialog(null, "inserisci cognome")));
         clienti[nClienti] = cliente;
         nClienti++;
-        return clienti;
+
     }
 
-    public static Cliente[] modificaCliente(int i){
-        clienti[i].setNome(JOptionPane.showInputDialog(null, "inserisci nome"));
-        clienti[i].setCognome(JOptionPane.showInputDialog(null, "inserisci cognome"));
-        return clienti;
+    public static void modificaCliente(){
+        visualizzaListaClienti();
+        String indice = JOptionPane.showInputDialog(null, "Inserisci l'indice del cliente da modificare",JOptionPane.QUESTION_MESSAGE);
+        modificaCliente(Integer.parseInt(indice));
+        clienti[indice].setNome(JOptionPane.showInputDialog(null, "inserisci nome"));
+        clienti[indice].setCognome(JOptionPane.showInputDialog(null, "inserisci cognome"));
+
     }
 
-    public static void cancellaCliente(int i){
-        clienti[i]= null;
+    public static void cancellaCliente(){
+        visualizzaListaClienti();
+        String index = JOptionPane.showInputDialog(null, "Inserisci l'indice del cliente da cancellare",JOptionPane.QUESTION_MESSAGE);
+        cancellaCliente(Integer.parseInt(index));
+        clienti[index]= null;
     }
 
 
