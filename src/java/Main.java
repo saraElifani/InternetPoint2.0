@@ -16,7 +16,7 @@ public class Main {
     }
 
     public static void menu(){
-        String[] options = {"1. Visualizza Lista Clienti", "2. Inserisci Cliente", "3. Modifica Cliente", "4. Cancella Cliente", "5. Esci"};
+        String[] options = {"1. Visualizza Lista Clienti", "2. Inserisci Cliente", "3. Modifica Cliente", "4. Cancella Cliente", "5. Checkout","6. Esci"};
         String menu = (String)JOptionPane.showInputDialog(null, "Che operazione vuoi fare??",
                 "Menu", JOptionPane.QUESTION_MESSAGE,null, options, options[1]);
         System.out.println(menu);
@@ -38,7 +38,11 @@ public class Main {
                 cancellaCliente();
                 programContinue= true;
                 break;
-            case "5. Esci":
+            case "5. Checkout":
+                esegiuCheckout();
+                programContinue= true;
+                break;
+            case "6. Esci":
                 programContinue = false;
                 break;
         }
@@ -52,7 +56,7 @@ public class Main {
     }
 
     public static void inserisciNuovoCliente(){
-        inserisciNuovoCliente(new Cliente(JOptionPane.showInputDialog(null, "inserisci nome"), JOptionPane.showInputDialog(null, "inserisci cognome")));
+        Cliente cliente = new Cliente(JOptionPane.showInputDialog(null, "inserisci nome"),JOptionPane.showInputDialog(null, "inserisci cognome"),JOptionPane.showInputDialog(null, "Inserisci l'orario di inizio in formato HH:MM"));
         clienti[nClienti] = cliente;
         nClienti++;
 
@@ -61,18 +65,47 @@ public class Main {
     public static void modificaCliente(){
         visualizzaListaClienti();
         String indice = JOptionPane.showInputDialog(null, "Inserisci l'indice del cliente da modificare",JOptionPane.QUESTION_MESSAGE);
-        modificaCliente(Integer.parseInt(indice));
-        clienti[indice].setNome(JOptionPane.showInputDialog(null, "inserisci nome"));
-        clienti[indice].setCognome(JOptionPane.showInputDialog(null, "inserisci cognome"));
+        clienti[Integer.parseInt(indice)].setNome(JOptionPane.showInputDialog(null, "inserisci nome"));
+        clienti[Integer.parseInt(indice)].setCognome(JOptionPane.showInputDialog(null, "inserisci cognome"));
 
     }
 
     public static void cancellaCliente(){
         visualizzaListaClienti();
         String index = JOptionPane.showInputDialog(null, "Inserisci l'indice del cliente da cancellare",JOptionPane.QUESTION_MESSAGE);
-        cancellaCliente(Integer.parseInt(index));
-        clienti[index]= null;
+        clienti[Integer.parseInt(index)]= null;
     }
 
+    public static void esegiuCheckout(){
+        visualizzaListaClienti();
+        String index = JOptionPane.showInputDialog(null, "Inserisci l'indice del cliente",JOptionPane.QUESTION_MESSAGE);
+        String orarioFine= JOptionPane.showInputDialog(null, "Inserisci l'orario di fine in formato HH:MM",
+                "orario di fine", JOptionPane.QUESTION_MESSAGE);
+        clienti[Integer.parseInt(index)].setOraFine(orarioFine);
+        String oraInizioDaSplittare = clienti[Integer.parseInt(index)].getOraInizio();
+        String[] parts = oraInizioDaSplittare.split(":");
+        int oreInizio= Integer.parseInt(parts[0]);
+        int minutiInizio = Integer.parseInt(parts[1]);
+        String oraFineDaSplittare = clienti[Integer.parseInt(index)].getOraFine();
+        String[] part = oraFineDaSplittare.split(":");
+        int oreFine= Integer.parseInt(part[0]);
+        int minutiFine = Integer.parseInt(part[1]);
+        int differenzaMinuti = (60 - minutiInizio)+ minutiFine;
+        int differenzaOre = 0;
+        if(differenzaMinuti > 0){
+            differenzaOre = (oreFine - oreInizio) - 1;
+        }
+        int minutiUtilizzo= (differenzaOre * 60) + differenzaMinuti;
+        int quantiQuartiDora = minutiUtilizzo / 15;
+        if(minutiUtilizzo%15 != 0){
+            quantiQuartiDora += 1;
+        }
+        int ore= quantiQuartiDora / 4;
+        int restoQuartiDora= quantiQuartiDora%4;
+        int mezzOra = restoQuartiDora / 2;
+        int quartiDora = restoQuartiDora%2;
+        double tariffa =  (ore + (mezzOra * 0.5) + (quartiDora * 0.3));
+        JOptionPane.showMessageDialog(null, "Importo: "+ tariffa, "Checkout", JOptionPane.INFORMATION_MESSAGE);
+    }
 
 }
